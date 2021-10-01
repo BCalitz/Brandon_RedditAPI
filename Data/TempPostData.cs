@@ -1,0 +1,55 @@
+﻿using Brandon_RedditAPI.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Brandon_RedditAPI.Data
+{
+    public class TempPostData : IPostData
+    {
+        private List<Post> posts = new List<Post>()
+        {
+                new Post {Id = Guid.NewGuid(), AuthorId = Guid.Empty, Content = "This is a test", Title= "Test", PostDate = DateTime.Now, Comments = new List<Comment>()},
+                new Post {Id = Guid.NewGuid(), AuthorId = Guid.Empty, Content = "Hello", Title= "Hello", PostDate = DateTime.Now, Comments  = new List<Comment>()}
+        };
+        public void addPost(Post post)
+        {
+            posts.Add(post);
+        }
+
+        public void deletePost(Guid id)
+        {
+            posts.RemoveAt(posts.FindIndex(post => post.Id == id));
+        }
+
+        public void downVote(Guid id)
+        {
+            var i = posts.FindIndex(post => post.Id == id);
+            posts[i].Downvotes += 1;
+        }
+
+        public void upVote(Guid id)
+        {
+            var i = posts.FindIndex(post => post.Id == id);
+            posts[i].Upvotes += 1;
+        }
+
+        public Post getPost(Guid id)
+        {
+            return posts.Where(post => post.Id == id).SingleOrDefault();
+        }
+
+        public IEnumerable<Post> getPosts()
+        {
+            return posts;
+        }
+
+        public void updatePost(Post post)
+        {
+            var index = posts.FindIndex(existingPost => existingPost.Id == post.Id);
+            posts[index] = post;
+        }
+
+        
+    }
+}
