@@ -126,10 +126,21 @@ namespace Brandon_RedditAPI.Controllers
         }
 
 
+        // GET ###/api/posts/comment###
+        //Looks through all Posts
+        [HttpGet]
+        [Route("comments")]
+        public ActionResult<IEnumerable<CommentDto>> GetComments([FromBody]Guid Id)
+        {
+            var comments = _Data.getComments(Id);
+            return comments.Select(comment => comment.AsDto()).ToList();
+        }
+
+
         // Post ###/api/posts/comment###
         //Adds a comment
         [HttpPost]
-        [Route("comment")]
+        [Route("comments")]
         public ActionResult CommentPost(CUCommentDto commentdata)
         {
             var post = _Data.getPost(commentdata.PostId);
@@ -151,9 +162,9 @@ namespace Brandon_RedditAPI.Controllers
 
             _Data.addComment(comment);
 
-            
 
-            return Ok("Voted");
+
+            return Ok("Created Comment");
         }
 
 

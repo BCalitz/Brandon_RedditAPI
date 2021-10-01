@@ -18,5 +18,6 @@ namespace Brandon_RedditAPI.Data
         void upVote(Guid id);
         void downVote(Guid id);
         void addComment(Comment comment);
+        IEnumerable<Comment> getComments(Guid Id);
     }
 }
