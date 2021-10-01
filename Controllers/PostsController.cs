@@ -1,4 +1,5 @@
 ﻿using Brandon_RedditAPI.Data;
+using Brandon_RedditAPI.Dtos;
 using Brandon_RedditAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,9 +23,9 @@ namespace Brandon_RedditAPI.Controllers
         //Looks through all Posts
         [HttpGet]
         [Route("")]
-        public IEnumerable<Post> GetPosts()
+        public IEnumerable<PostDto> GetPosts()
         {
-            var posts = _Data.getPosts();
+            var posts = _Data.getPosts().Select(post => post.AsConDto());
             return posts;
         }
 
@@ -32,19 +33,19 @@ namespace Brandon_RedditAPI.Controllers
         //Selects a Post
         [HttpGet]
         [Route("{Id}")]
-        public ActionResult<Post> GetPost(Guid Id)
+        public ActionResult<PostDto> GetPost(Guid Id)
         {
             var post = _Data.getPost(Id);
             if(post is null) { NotFound($"The post with the Id of: {Id} was not found"); }
 
-            return post;
+            return post.AsDto();
         }
 
         // POST ###/api/posts/###
         //Create a post
         [HttpPost]
         [Route("")]
-        public ActionResult<Post> AddPost(Post postdata)
+        public ActionResult<PostDto> AddPost(PostDto postdata)
         {
             Post post = new Post()
             {
@@ -62,7 +63,7 @@ namespace Brandon_RedditAPI.Controllers
 
             _Data.addPost(post);
 
-            return CreatedAtAction(nameof(GetPost), new { id = post.Id }, post);
+            return CreatedAtAction(nameof(GetPost), new { id = post.Id }, post.AsDto());
         }
 
 
@@ -70,7 +71,7 @@ namespace Brandon_RedditAPI.Controllers
         //Edits the Post
         [HttpPut]
         [Route("{Id}")]
-        public ActionResult<Post> UpdatePost(Guid Id, Post postdata)
+        public ActionResult<PostDto> UpdatePost(Guid Id, PostDto postdata)
         {
             var exPost = _Data.getPost(Id);
             if (exPost is null)
@@ -86,7 +87,7 @@ namespace Brandon_RedditAPI.Controllers
 
             _Data.updatePost(post);
 
-            return CreatedAtAction(nameof(GetPost), new { id = post.Id }, post);
+            return CreatedAtAction(nameof(GetPost), new { id = post.Id }, post.AsDto());
         }
 
         // DELETE ###/api/posts/{Id}###
