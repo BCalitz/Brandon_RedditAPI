@@ -26,17 +26,17 @@ namespace Brandon_RedditAPI.Data
             posts.RemoveAt(posts.FindIndex(post => post.Id == id));
         }
 
-        public void downVote(Guid id)
-        {
-            var i = posts.FindIndex(post => post.Id == id);
-            posts[i].Downvotes += 1;
-        }
+        //public void downVote<T>(T thing)
+        //{
+        //    var post = posts.FindIndex(post => post.Id == id);
+        //    posts[i].Downvotes += 1;
+        //}
 
-        public void upVote(Guid id)
-        {
-            var i = posts.FindIndex(post => post.Id == id);
-            posts[i].Upvotes += 1;
-        }
+        //public void upVote(Guid id)
+        //{
+        //    var i = posts.FindIndex(post => post.Id == id);
+        //    posts[i].Upvotes += 1;
+        //}
 
         public Post getPost(Guid id)
         {
@@ -58,6 +58,11 @@ namespace Brandon_RedditAPI.Data
         public IEnumerable<Comment> getComments(Guid Id)
         {
             return comments.FindAll(comment => comment.PostId == Id);
+        }
+
+        public Comment getComment(Guid Id)
+        {
+            return comments.Where(comment => comment.Id == Id).FirstOrDefault();
         }
 
         public void addComment(Comment comment)

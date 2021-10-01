@@ -15,5 +15,15 @@ namespace Brandon_RedditAPI.Models
         public int Upvotes { get; set; }
         public int Downvotes { get; set; }
         public DateTime CommentDate { get; set; }
+
+        public void upVote()
+        {
+            Upvotes += 1;
+        }
+
+        public void downVote()
+        {
+            Upvotes += 1;
+        }
     }
 }

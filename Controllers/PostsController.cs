@@ -111,16 +111,21 @@ namespace Brandon_RedditAPI.Controllers
         [Route("vote")]
         public ActionResult VotePost(VoteDto vote)
         {
-            var exPost = _Data.getPost(vote.thingId);
-            if (exPost is null)
+            dynamic thing = _Data.getPost(vote.thingId);
+            if (thing is null)
             {
-                return NotFound();
+                thing = _Data.getComment(vote.thingId);
+                if (thing is null) {
+                    return NotFound();
+                }
             }
 
             
 
-            if(vote.rating == -1) { _Data.downVote(vote.thingId); }
-            else if(vote.rating == 1) { _Data.upVote(vote.thingId); }
+            
+
+            if(vote.rating == -1) { thing.downVote(); }
+            else if(vote.rating == 1) { thing.upVote(); }
 
             return Ok("Voted");
         }

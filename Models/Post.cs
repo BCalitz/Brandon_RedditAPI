@@ -16,5 +16,15 @@ namespace Brandon_RedditAPI.Models
         public string Title { get; set; }
         public string[] Tags { get; set; }
 
+        public void upVote()
+        {
+            Upvotes += 1;
+        }
+
+        public void downVote()
+        {
+            Upvotes += 1;
+        }
+
     }
 }
