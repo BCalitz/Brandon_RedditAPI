@@ -13,5 +13,7 @@ namespace Brandon_RedditAPI.Dtos
         public int Upvotes { get; set; }
         public int Downvotes { get; set; }
         public DateTime PostDate { get; set; }
+
+        public IEnumerable<CommentDto> comments { get; set; }
     }
 }

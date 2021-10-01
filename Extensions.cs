@@ -39,6 +39,22 @@ namespace Brandon_RedditAPI
             };
         }
 
+        public static PostDto AsDto(this Post post, IEnumerable<Comment> comments)
+        {
+            return new PostDto
+            {
+                Id = post.Id,
+                AuthorId = post.AuthorId,
+                Title = post.Title,
+                Content = post.Content,
+                Tags = post.Tags,
+                Downvotes = post.Downvotes,
+                Upvotes = post.Upvotes,
+                PostDate = post.PostDate,
+                comments = comments.Select(comment => comment.AsDto())
+        };
+        }
+
 
     }
 }

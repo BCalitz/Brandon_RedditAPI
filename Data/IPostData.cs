@@ -9,7 +9,7 @@ namespace Brandon_RedditAPI.Data
     public interface IPostData
     {
         void addPost(Post post);
-        Post getPost(Guid id);
+        public Post getPost(Guid id);
         IEnumerable<Post> getPosts();
 
         void updatePost(Post post);

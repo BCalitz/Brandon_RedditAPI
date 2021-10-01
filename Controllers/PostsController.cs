@@ -38,7 +38,7 @@ namespace Brandon_RedditAPI.Controllers
             var post = _Data.getPost(Id);
             if(post is null) { return NotFound($"The post with the Id of: {Id} was not found"); }
 
-            return post.AsDto();
+            return post.AsDto(_Data.getComments(Id));
         }
 
         // POST ###/api/posts/###
@@ -62,7 +62,7 @@ namespace Brandon_RedditAPI.Controllers
 
             _Data.addPost(post);
 
-            return CreatedAtAction(nameof(GetPost), new { id = post.Id }, post.AsDto());
+            return Created(HttpContext.Request.Scheme = "://" + HttpContext.Request.Host + "/" + post.Id, post);
         }
 
 
@@ -83,7 +83,7 @@ namespace Brandon_RedditAPI.Controllers
 
             _Data.updatePost(post);
 
-            return CreatedAtAction(nameof(GetPost), new { id = post.Id }, post.AsDto());
+            return Ok("Edit Successfull");
         }
 
         // DELETE ###/api/posts/{Id}###

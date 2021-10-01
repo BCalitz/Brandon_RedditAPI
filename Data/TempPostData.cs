@@ -40,7 +40,7 @@ namespace Brandon_RedditAPI.Data
 
         public Post getPost(Guid id)
         {
-            return posts.Where(post => post.Id == id).SingleOrDefault(); 
+            return posts.Where(post => post.Id == id).SingleOrDefault();
         }
 
         public IEnumerable<Post> getPosts()
