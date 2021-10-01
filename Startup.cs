@@ -1,4 +1,5 @@
 using Brandon_RedditAPI.Data;
+using Brandon_RedditAPI.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -7,6 +8,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +31,17 @@ namespace Brandon_RedditAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IPostData, TempPostData>();
+            BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
+            BsonSerializer.RegisterSerializer(new DateTimeSerializer(BsonType.String));
+
+
+            services.AddSingleton<IMongoClient>(serviceProvider=>
+            {
+                var setting = Configuration.GetSection(nameof(MongoDBSettings)).Get<MongoDBSettings>();
+                return new MongoClient(setting.ConnectionString);
+            });
+
+            services.AddSingleton<IPostData, DBPostData>();
             services.AddControllers();
         }
 
