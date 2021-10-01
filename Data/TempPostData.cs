@@ -62,7 +62,7 @@ namespace Brandon_RedditAPI.Data
 
         public Comment getComment(Guid Id)
         {
-            return comments.Where(comment => comment.Id == Id).FirstOrDefault();
+            return comments.Where(comment => comment.Id == Id).SingleOrDefault();
         }
 
         public void addComment(Comment comment)
