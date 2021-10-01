@@ -95,7 +95,7 @@ namespace Brandon_RedditAPI.Controllers
             if (post is null) { return NotFound($"The post with the Id of: {Id} was not found"); }
 
             _Data.deletePost(Id);
-            return NoContent();
+            return Ok("Deleted Post");
         }
 
         // Post ###/api/posts/vote###
@@ -111,13 +111,10 @@ namespace Brandon_RedditAPI.Controllers
                 if (thing is null) { return NotFound($"The thing with the Id of: {vote.thingId} was not found"); }
             }
 
-            
-
-            
 
             if(vote.rating == -1) { thing.downVote(); }
             else if(vote.rating == 1) { thing.upVote(); }
-
+            _Data.Vote(thing);
             return Ok("Voted");
         }
 
@@ -161,6 +158,24 @@ namespace Brandon_RedditAPI.Controllers
 
 
             return Ok("Created Comment");
+        }
+
+
+        [HttpPut]
+        [Route("comment/{Id}")]
+        public ActionResult<CommentDto> UpdateComment(Guid Id, CommentDto commentdata)
+        {
+            var exComment = _Data.getComment(Id);
+            if (exComment is null) { return NotFound($"The Comment with the Id of: {Id} was not found"); }
+
+            Comment comment = exComment;
+            //only changing data that has been inserted
+    
+            if (!(commentdata.Content is null)) { comment.Content = commentdata.Content; }
+
+            _Data.updateComment(comment);
+
+            return Ok("Edit Successfull");
         }
 
 

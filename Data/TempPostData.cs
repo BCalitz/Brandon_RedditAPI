@@ -59,6 +59,14 @@ namespace Brandon_RedditAPI.Data
             comments.Add(comment);
         }
 
-        
+        public void updateComment(Comment comment)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Vote<T>(T thing)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

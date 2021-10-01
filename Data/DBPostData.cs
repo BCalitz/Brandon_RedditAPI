@@ -1,9 +1,9 @@
 ﻿using Brandon_RedditAPI.Models;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Brandon_RedditAPI.Data
 {
@@ -15,6 +15,9 @@ namespace Brandon_RedditAPI.Data
 
         private readonly IMongoCollection<Post> postColl;
         private readonly IMongoCollection<Comment> commentColl;
+
+        private readonly FilterDefinitionBuilder<Post> postFilterBuilder = Builders<Post>.Filter;
+        private readonly FilterDefinitionBuilder<Comment> commentFilterBuilder = Builders<Comment>.Filter;
         public DBPostData(IMongoClient mongoClient)
         {
             IMongoDatabase db = mongoClient.GetDatabase(_dbName);
@@ -35,32 +38,59 @@ namespace Brandon_RedditAPI.Data
 
         public void deletePost(Guid id)
         {
-            postColl.DeleteOne(post => post.Id == id);
+            var filter = postFilterBuilder.Eq(post => post.Id, id);
+            postColl.DeleteOne(filter);
         }
 
         public Comment getComment(Guid Id)
         {
-            throw new NotImplementedException();
+            var filter = commentFilterBuilder.Eq(comment => comment.Id, Id);
+            return commentColl.Find(filter).SingleOrDefault();
         }
 
         public IEnumerable<Comment> getComments(Guid Id)
         {
-            throw new NotImplementedException();
+            var filter = commentFilterBuilder.Eq(comment=> comment.PostId, Id);
+            return commentColl.Find(filter).ToList();
         }
 
         public Post getPost(Guid id)
         {
-            throw new NotImplementedException();
+            var filter = postFilterBuilder.Eq(post => post.Id, id);
+            return postColl.Find(filter).SingleOrDefault();
         }
 
         public IEnumerable<Post> getPosts()
         {
-            throw new NotImplementedException();
+            return postColl.Find(new BsonDocument()).ToList();
         }
 
         public void updatePost(Post post)
         {
-            throw new NotImplementedException();
+            var filter = postFilterBuilder.Eq(expost => expost.Id, post.Id);
+            postColl.ReplaceOne(filter, post);
         }
+
+
+        public void updateComment(Comment comment)
+        {
+            var filter = commentFilterBuilder.Eq(expost => expost.Id, comment.Id);
+            commentColl.ReplaceOne(filter, comment);
+        }
+
+        public void Vote<T>(T thing)
+        {
+            if (thing is Post) 
+            {
+                updatePost((Post)(object)thing);
+            }else if(thing is Comment)
+            {
+                updateComment((Comment)(object)thing);
+            }
+        }
+
+
+
+        
     }
 }

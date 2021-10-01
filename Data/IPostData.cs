@@ -20,5 +20,7 @@ namespace Brandon_RedditAPI.Data
         void addComment(Comment comment);
         IEnumerable<Comment> getComments(Guid Id);
         Comment getComment(Guid Id);
+        void updateComment(Comment comment);
+        void Vote<T>(T thing);
     }
 }
