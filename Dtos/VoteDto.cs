@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 namespace Brandon_RedditAPI.Dtos
 {
     //Dto for Creating adn updating a post
-    public class CUPostDto
+    public class VoteDto
     {
         [Required]
-        public string Title { get; set; }
-        public string[] Tags { get; set; }
+        public Guid thingId { get; set; }
         [Required]
-        public string Content { get; set; }
+        [Range(-1,1)]
+        public int rating { get; set; }
 
     }
 }

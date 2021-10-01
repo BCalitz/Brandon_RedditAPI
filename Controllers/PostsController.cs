@@ -25,7 +25,7 @@ namespace Brandon_RedditAPI.Controllers
         [Route("")]
         public IEnumerable<PostDto> GetPosts()
         {
-            var posts = _Data.getPosts().Select(post => post.AsConDto());
+            var posts = _Data.getPosts().Select(post => post.AsDto());
             return posts;
         }
 
@@ -53,7 +53,6 @@ namespace Brandon_RedditAPI.Controllers
                 AuthorId = Guid.Empty,
                 Title = postdata.Title,
                 Content = postdata.Content,
-                Comments = new List<Comment>(),
                 Tags = postdata.Tags,
                 Downvotes = 0,
                 Upvotes = 0,
@@ -104,6 +103,57 @@ namespace Brandon_RedditAPI.Controllers
 
             _Data.deletePost(Id);
             return NoContent();
+        }
+
+        // Post ###/api/posts/vote###
+        //Edits the Post
+        [HttpPost]
+        [Route("vote")]
+        public ActionResult VotePost(VoteDto vote)
+        {
+            var exPost = _Data.getPost(vote.thingId);
+            if (exPost is null)
+            {
+                return NotFound();
+            }
+
+            
+
+            if(vote.rating == -1) { _Data.downVote(vote.thingId); }
+            else if(vote.rating == 1) { _Data.upVote(vote.thingId); }
+
+            return Ok("Voted");
+        }
+
+
+        // Post ###/api/posts/comment###
+        //Adds a comment
+        [HttpPost]
+        [Route("comment")]
+        public ActionResult CommentPost(CUCommentDto commentdata)
+        {
+            var post = _Data.getPost(commentdata.PostId);
+            if (post is null)
+            {
+                return NotFound();
+            }
+
+            var comment = new Comment()
+            {
+                Id = Guid.NewGuid(),
+                PostId = commentdata.PostId,
+                AuthorId = Guid.Empty,
+                Content = commentdata.Content,
+                Upvotes = 0,
+                Downvotes = 0,
+                CommentDate = DateTime.Now
+            };
+
+            _Data.addComment(comment);
+
+            
+
+            return Ok("Voted");
         }
 
 

@@ -1,4 +1,5 @@
-﻿using Brandon_RedditAPI.Models;
+﻿using Brandon_RedditAPI.Controllers;
+using Brandon_RedditAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,12 @@ namespace Brandon_RedditAPI.Data
     {
         private List<Post> posts = new List<Post>()
         {
-                new Post {Id = Guid.NewGuid(), AuthorId = Guid.Empty, Content = "This is a test", Title= "Test", PostDate = DateTime.Now, Comments = new List<Comment>()},
-                new Post {Id = Guid.NewGuid(), AuthorId = Guid.Empty, Content = "Hello", Title= "Hello", PostDate = DateTime.Now, Comments  = new List<Comment>()}
+                new Post {Id = Guid.NewGuid(), AuthorId = Guid.Empty, Content = "This is a test", Title= "Test", PostDate = DateTime.Now},
+                new Post {Id = Guid.NewGuid(), AuthorId = Guid.Empty, Content = "Hello", Title= "Hello", PostDate = DateTime.Now}
         };
+
+        private List<Comment> comments = new List<Comment>() { };
+
         public void addPost(Post post)
         {
             posts.Add(post);
@@ -48,6 +52,11 @@ namespace Brandon_RedditAPI.Data
         {
             var index = posts.FindIndex(existingPost => existingPost.Id == post.Id);
             posts[index] = post;
+        }
+
+        public void addComment(Comment comment)
+        {
+            comments.Add(comment);
         }
 
         

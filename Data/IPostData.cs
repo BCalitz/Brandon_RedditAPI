@@ -17,5 +17,6 @@ namespace Brandon_RedditAPI.Data
         void deletePost(Guid id);
         void upVote(Guid id);
         void downVote(Guid id);
+        void addComment(Comment comment);
     }
 }
