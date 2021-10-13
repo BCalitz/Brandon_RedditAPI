@@ -21,8 +21,7 @@ namespace Brandon_RedditAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DbContext>(options =>
-            options.UseSqlite("Data Source = BrandonRedditAPI"));
+            services.AddDbContext<DBSetup>();
 
             services.AddSingleton<IPostData, DBPostData>();
             services.AddControllers();

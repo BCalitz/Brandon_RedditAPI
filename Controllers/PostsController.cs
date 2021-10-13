@@ -13,11 +13,11 @@ namespace Brandon_RedditAPI.Controllers
     [Route("api/[controller]")]
     public class PostsController : ControllerBase
     {
-        private readonly DBSetup _context;
+        private readonly DBPostData _Data;
 
-        public PostsController(DBSetup context)
+        public PostsController(DBPostData data)
         {
-            _context = context;
+            _Data = data;
         }
         // GET ###/api/posts/###
         //Looks through all Posts
@@ -25,7 +25,7 @@ namespace Brandon_RedditAPI.Controllers
         [Route("")]
         public IEnumerable<PostDto> GetPosts()
         {
-            var posts = _context.posts.Select(post => post.AsDto());
+            var posts = _Data.getPosts().Select(post => post.AsDto());
             return posts;
         }
 
@@ -35,7 +35,7 @@ namespace Brandon_RedditAPI.Controllers
         [Route("{Id}")]
         public ActionResult<PostDto> GetPost(string Id)
         {
-            var post = _context.getPost(Id);
+            var post = _Data.getPost(Id);
             if(post is null) { return NotFound($"The post with the Id of: {Id} was not found"); }
 
             return post.AsDto(_Data.getComments(Id));
@@ -72,16 +72,11 @@ namespace Brandon_RedditAPI.Controllers
         [Route("{Id}")]
         public ActionResult<PostDto> UpdatePost(string Id, PostDto postdata)
         {
-            var exPost = _Data.getPost(Id);
-            if (exPost is null) { return NotFound($"The post with the Id of: {Id} was not found"); }
+            if (_Data.getPost(Id) is null) { return NotFound($"The post with the Id of: {Id} was not found"); }
 
-            Post post = exPost;
-            //only changing data that has been inserted
-            if (!(postdata.Title is null)) { post.Title = postdata.Title; }
-            if (!(postdata.Tags is null)) { post.Tags = postdata.Tags; }
-            if (!(postdata.Content is null)) { post.Content = postdata.Content; }
+            
 
-            _Data.updatePost(post);
+            _Data.updatePost(postdata);
 
             return Ok("Edit Successfull");
         }
@@ -103,19 +98,16 @@ namespace Brandon_RedditAPI.Controllers
         //Edits the Post
         [HttpPost]
         [Route("vote")]
-        public ActionResult VotePost(VoteDto vote)
+        public ActionResult VotePost(VoteDto voteData)
         {
-            dynamic thing = _Data.getPost(vote.thingId);
-            if (thing is null)
+            Vote vote = new Vote()
             {
-                thing = _Data.getComment(vote.thingId);
-                if (thing is null) { return NotFound($"The thing with the Id of: {vote.thingId} was not found"); }
-            }
-
-
-            if(vote.rating == -1) { thing.downVote(); }
-            else if(vote.rating == 1) { thing.upVote(); }
-            _Data.Vote(thing);
+                Id = "V_"+Guid.NewGuid().GetHashCode(),
+                AuthorId = null,
+                ThingId = voteData.thingId,
+                vote = voteData.rating
+            };
+            _Data.Vote(vote);
             return Ok("Voted");
         }
 
@@ -169,12 +161,10 @@ namespace Brandon_RedditAPI.Controllers
             var exComment = _Data.getComment(Id);
             if (exComment is null) { return NotFound($"The Comment with the Id of: {Id} was not found"); }
 
-            Comment comment = exComment;
-            //only changing data that has been inserted
     
-            if (!(commentdata.Content is null)) { comment.Content = commentdata.Content; }
+            
 
-            _Data.updateComment(comment);
+            _Data.updateComment(commentdata);
 
             return Ok("Edit Successfull");
         }

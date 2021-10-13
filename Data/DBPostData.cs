@@ -1,4 +1,5 @@
-﻿using Brandon_RedditAPI.Models;
+﻿using Brandon_RedditAPI.Dtos;
+using Brandon_RedditAPI.Models;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
@@ -9,100 +10,93 @@ namespace Brandon_RedditAPI.Data
 {
     public class DBPostData : IPostData
     {
-        private readonly IMongoCollection<Post> postColl;
-        private readonly IMongoCollection<Comment> commentColl;
-        private readonly IMongoCollection<User> userColl;
+        private readonly DBSetup _context;
 
-        private readonly FilterDefinitionBuilder<Post> postFilterBuilder = Builders<Post>.Filter;
-        private readonly FilterDefinitionBuilder<Comment> commentFilterBuilder = Builders<Comment>.Filter;
-
-        public DBPostData(IMongoClient mongoClient)
+        public DBPostData(DBSetup context)
         {
-            IMongoDatabase db = mongoClient.GetDatabase("brandonReddit");
-
-            postColl = db.GetCollection<Post>("posts");
-            commentColl = db.GetCollection<Comment>("comments");
-            userColl = db.GetCollection<User>("users");
+            _context = context;
         }
 
         public void addComment(Comment comment)
         {
-            commentColl.InsertOne(comment);
+            _context.comments.Add(comment);
         }
 
         public void addPost(Post post)
         {
-            postColl.InsertOne(post);
+            _context.posts.Add(post);
         }
 
-        public void deletePost(string id)
+        public void deletePost(string Id)
         {
-            var filter = postFilterBuilder.Eq(post => post.Id, id);
-            postColl.DeleteOne(filter);
+            _context.posts.Remove(getPost(Id));
         }
 
         public Comment getComment(string Id)
         {
-            var filter = commentFilterBuilder.Eq(comment => comment.Id, Id);
-            return commentColl.Find(filter).SingleOrDefault();
+            return _context.comments.SingleOrDefault(c => c.Id == Id);
         }
 
         public IEnumerable<Comment> getComments(string Id)
         {
-            var filter = commentFilterBuilder.Eq(comment=> comment.PostId, Id);
-            return commentColl.Find(filter).ToList();
+            return _context.comments.Where(c => c.PostId == Id);
         }
 
-        public Post getPost(string id)
+        public Post getPost(string Id)
         {
-            var filter = postFilterBuilder.Eq(post => post.Id, id);
-            return postColl.Find(filter).SingleOrDefault();
+            return _context.posts.SingleOrDefault(p => p.Id == Id);
         }
 
         public IEnumerable<Post> getPosts()
         {
-            return postColl.Find(new BsonDocument()).ToList();
+            return _context.posts.ToList();
         }
 
-        public void updatePost(Post post)
+        public void updatePost(PostDto postdata)
         {
-            var filter = postFilterBuilder.Eq(expost => expost.Id, post.Id);
-            postColl.ReplaceOne(filter, post);
+           var post =  getPost(postdata.Id);
+            //only changing data that has been inserted
+            if (!(postdata.Title is null)) { post.Title = postdata.Title; }
+            if (!(postdata.Tags is null)) { post.Tags = postdata.Tags; }
+            if (!(postdata.Content is null)) { post.Content = postdata.Content; }
+            _context.SaveChanges();
         }
 
 
-        public void updateComment(Comment comment)
+        public void updateComment(CommentDto commentdata)
         {
-            var filter = commentFilterBuilder.Eq(expost => expost.Id, comment.Id);
-            commentColl.ReplaceOne(filter, comment);
-        }
-
-        public void Vote<T>(T thing)
-        {
-            if (thing is Post) 
-            {
-                updatePost((Post)(object)thing);
-            }else if(thing is Comment)
-            {
-                updateComment((Comment)(object)thing);
+            var comment = getComment(commentdata.Id);
+            if (!(commentdata.Content is null)) { comment.Content = commentdata.Content; }
+            _context.SaveChanges();
             }
+
+        public void Vote(Vote vote)
+        {
+            _context.votes.Add(vote);
         }
 
         public void AddUser(User user)
         {
-            userColl.InsertOne(user);
+            _context.users.Add(user);
         }
 
         public IEnumerable<Post> getUserPosts(string AuthorId)
         {
-            var filter = postFilterBuilder.Eq(post => post.AuthorId, AuthorId);
-            return postColl.Find(filter).ToList();
+            return _context.posts.Where(p => p.AuthorId == AuthorId).ToList();
         }
 
         public IEnumerable<Post> getUserActivity(string AuthorId)
         {
-            var filter = postFilterBuilder.Eq(post => post.AuthorId, AuthorId);
-            return postColl.Find(filter).ToList();
+            var activitys =  _context.votes.Where(p => p.AuthorId == AuthorId).ToList();
+            List<Post> posts = new List<Post>();
+            foreach(var activity in activitys)
+            {
+                if (activity.ThingId[0] == 'P')
+                {
+                    posts.Add(getPost(activity.ThingId));
+                }
+            }
+            return posts;
         }
 
 
