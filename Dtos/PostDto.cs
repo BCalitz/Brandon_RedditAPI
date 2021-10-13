@@ -8,8 +8,8 @@ namespace Brandon_RedditAPI.Dtos
 {
     public class PostDto:CUPostDto
     {
-        public Guid Id { get; set; }
-        public Guid AuthorId { get; set; }
+        public string Id { get; set; }
+        public string AuthorId { get; set; }
         public int Upvotes { get; set; }
         public int Downvotes { get; set; }
         public DateTime PostDate { get; set; }

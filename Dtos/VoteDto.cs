@@ -11,7 +11,7 @@ namespace Brandon_RedditAPI.Dtos
     public class VoteDto
     {
         [Required]
-        public Guid thingId { get; set; }
+        public string thingId { get; set; }
         [Required]
         [Range(-1,1)]
         public int rating { get; set; }

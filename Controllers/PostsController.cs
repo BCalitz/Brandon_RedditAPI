@@ -32,7 +32,7 @@ namespace Brandon_RedditAPI.Controllers
         //Selects a Post
         [HttpGet]
         [Route("{Id}")]
-        public ActionResult<PostDto> GetPost(Guid Id)
+        public ActionResult<PostDto> GetPost(string Id)
         {
             var post = _Data.getPost(Id);
             if(post is null) { return NotFound($"The post with the Id of: {Id} was not found"); }
@@ -48,8 +48,8 @@ namespace Brandon_RedditAPI.Controllers
         {
             Post post = new Post()
             {
-                Id = Guid.NewGuid(),
-                AuthorId = Guid.Empty,
+                Id = "P_"+Guid.NewGuid().GetHashCode(),
+                AuthorId = postdata.AuthorId,
                 Title = postdata.Title,
                 Content = postdata.Content,
                 Tags = postdata.Tags,
@@ -69,7 +69,7 @@ namespace Brandon_RedditAPI.Controllers
         //Edits the Post
         [HttpPut]
         [Route("{Id}")]
-        public ActionResult<PostDto> UpdatePost(Guid Id, PostDto postdata)
+        public ActionResult<PostDto> UpdatePost(string Id, PostDto postdata)
         {
             var exPost = _Data.getPost(Id);
             if (exPost is null) { return NotFound($"The post with the Id of: {Id} was not found"); }
@@ -89,7 +89,7 @@ namespace Brandon_RedditAPI.Controllers
         //Edits the Post
         [HttpDelete]
         [Route("{Id}")]
-        public ActionResult DeletePost(Guid Id)
+        public ActionResult DeletePost(string Id)
         {
             var post = _Data.getPost(Id);
             if (post is null) { return NotFound($"The post with the Id of: {Id} was not found"); }
@@ -123,10 +123,10 @@ namespace Brandon_RedditAPI.Controllers
         //Looks through all Posts
         [HttpGet]
         [Route("comments")]
-        public ActionResult<IEnumerable<CommentDto>> GetComments([FromBody]Guid Id)
+        public ActionResult<IEnumerable<CommentDto>> GetComments([FromBody]string Id)
         {
-            var post = _Data.getPost(Id);
-            if (post is null) { return NotFound($"The post with the Id of: {Id} was not found"); }
+            //var post = _Data.getPost(Id);
+            //if (post is null) { return NotFound($"The post with the Id of: {Id} was not found"); }
 
             var comments = _Data.getComments(Id);
             return comments.Select(comment => comment.AsDto()).ToList();
@@ -144,9 +144,9 @@ namespace Brandon_RedditAPI.Controllers
 
             var comment = new Comment()
             {
-                Id = Guid.NewGuid(),
+                Id = "C_"+Guid.NewGuid().GetHashCode(),
                 PostId = commentdata.PostId,
-                AuthorId = Guid.Empty,
+                AuthorId = commentdata.AuthorId,
                 Content = commentdata.Content,
                 Upvotes = 0,
                 Downvotes = 0,
@@ -163,7 +163,7 @@ namespace Brandon_RedditAPI.Controllers
 
         [HttpPut]
         [Route("comment/{Id}")]
-        public ActionResult<CommentDto> UpdateComment(Guid Id, CommentDto commentdata)
+        public ActionResult<CommentDto> UpdateComment(string Id, CommentDto commentdata)
         {
             var exComment = _Data.getComment(Id);
             if (exComment is null) { return NotFound($"The Comment with the Id of: {Id} was not found"); }

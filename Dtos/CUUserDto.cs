@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Brandon_RedditAPI.Dtos
 {
-    public class CUCommentDto
+    public class CUUserDto
     {
-        public string PostId { get; set; }
-        public string AuthorId { get; set; }
-        public string Content { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
     }
 }

@@ -12,18 +12,22 @@ namespace Brandon_RedditAPI.Data
         private const string _dbName = "brandonReddit";
         private const string _postCollName = "posts";
         private const string _commentCollName = "comments";
+        private const string _userCollName = "user";
 
         private readonly IMongoCollection<Post> postColl;
         private readonly IMongoCollection<Comment> commentColl;
+        private readonly IMongoCollection<User> userColl;
 
         private readonly FilterDefinitionBuilder<Post> postFilterBuilder = Builders<Post>.Filter;
         private readonly FilterDefinitionBuilder<Comment> commentFilterBuilder = Builders<Comment>.Filter;
+        private readonly FilterDefinitionBuilder<User> userFilterBuilder = Builders<User>.Filter;
         public DBPostData(IMongoClient mongoClient)
         {
             IMongoDatabase db = mongoClient.GetDatabase(_dbName);
 
             postColl = db.GetCollection<Post>(_postCollName);
             commentColl = db.GetCollection<Comment>(_commentCollName);
+            userColl = db.GetCollection<User>(_userCollName);
         }
 
         public void addComment(Comment comment)
@@ -36,25 +40,25 @@ namespace Brandon_RedditAPI.Data
             postColl.InsertOne(post);
         }
 
-        public void deletePost(Guid id)
+        public void deletePost(string id)
         {
             var filter = postFilterBuilder.Eq(post => post.Id, id);
             postColl.DeleteOne(filter);
         }
 
-        public Comment getComment(Guid Id)
+        public Comment getComment(string Id)
         {
             var filter = commentFilterBuilder.Eq(comment => comment.Id, Id);
             return commentColl.Find(filter).SingleOrDefault();
         }
 
-        public IEnumerable<Comment> getComments(Guid Id)
+        public IEnumerable<Comment> getComments(string Id)
         {
             var filter = commentFilterBuilder.Eq(comment=> comment.PostId, Id);
             return commentColl.Find(filter).ToList();
         }
 
-        public Post getPost(Guid id)
+        public Post getPost(string id)
         {
             var filter = postFilterBuilder.Eq(post => post.Id, id);
             return postColl.Find(filter).SingleOrDefault();
@@ -89,8 +93,14 @@ namespace Brandon_RedditAPI.Data
             }
         }
 
+        public void AddUser(User user)
+        {
+            userColl.InsertOne(user);
+        }
 
 
+
+        
         
     }
 }

@@ -9,18 +9,17 @@ namespace Brandon_RedditAPI.Data
     public interface IPostData
     {
         void addPost(Post post);
-        public Post getPost(Guid id);
+        public Post getPost(string id);
         IEnumerable<Post> getPosts();
 
         void updatePost(Post post);
 
-        void deletePost(Guid id);
-        //void upVote(Guid id);
-        //void downVote(Guid id);
+        void deletePost(string id);
         void addComment(Comment comment);
-        IEnumerable<Comment> getComments(Guid Id);
-        Comment getComment(Guid Id);
+        IEnumerable<Comment> getComments(string Id);
+        Comment getComment(string Id);
         void updateComment(Comment comment);
         void Vote<T>(T thing);
+        void AddUser(User user);
     }
 }
