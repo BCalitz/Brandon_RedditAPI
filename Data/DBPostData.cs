@@ -9,25 +9,20 @@ namespace Brandon_RedditAPI.Data
 {
     public class DBPostData : IPostData
     {
-        private const string _dbName = "brandonReddit";
-        private const string _postCollName = "posts";
-        private const string _commentCollName = "comments";
-        private const string _userCollName = "user";
-
         private readonly IMongoCollection<Post> postColl;
         private readonly IMongoCollection<Comment> commentColl;
         private readonly IMongoCollection<User> userColl;
 
         private readonly FilterDefinitionBuilder<Post> postFilterBuilder = Builders<Post>.Filter;
         private readonly FilterDefinitionBuilder<Comment> commentFilterBuilder = Builders<Comment>.Filter;
-        private readonly FilterDefinitionBuilder<User> userFilterBuilder = Builders<User>.Filter;
+
         public DBPostData(IMongoClient mongoClient)
         {
-            IMongoDatabase db = mongoClient.GetDatabase(_dbName);
+            IMongoDatabase db = mongoClient.GetDatabase("brandonReddit");
 
-            postColl = db.GetCollection<Post>(_postCollName);
-            commentColl = db.GetCollection<Comment>(_commentCollName);
-            userColl = db.GetCollection<User>(_userCollName);
+            postColl = db.GetCollection<Post>("posts");
+            commentColl = db.GetCollection<Comment>("comments");
+            userColl = db.GetCollection<User>("users");
         }
 
         public void addComment(Comment comment)
@@ -98,9 +93,19 @@ namespace Brandon_RedditAPI.Data
             userColl.InsertOne(user);
         }
 
+        public IEnumerable<Post> getUserPosts(string AuthorId)
+        {
+            var filter = postFilterBuilder.Eq(post => post.AuthorId, AuthorId);
+            return postColl.Find(filter).ToList();
+        }
+
+        public IEnumerable<Post> getUserActivity(string AuthorId)
+        {
+            var filter = postFilterBuilder.Eq(post => post.AuthorId, AuthorId);
+            return postColl.Find(filter).ToList();
+        }
 
 
-        
-        
+
     }
 }

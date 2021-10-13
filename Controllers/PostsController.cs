@@ -13,10 +13,11 @@ namespace Brandon_RedditAPI.Controllers
     [Route("api/[controller]")]
     public class PostsController : ControllerBase
     {
-        private IPostData _Data;
-        public PostsController(IPostData postData)
+        private readonly DBSetup _context;
+
+        public PostsController(DBSetup context)
         {
-            this._Data = postData;
+            _context = context;
         }
         // GET ###/api/posts/###
         //Looks through all Posts
@@ -24,7 +25,7 @@ namespace Brandon_RedditAPI.Controllers
         [Route("")]
         public IEnumerable<PostDto> GetPosts()
         {
-            var posts = _Data.getPosts().Select(post => post.AsDto());
+            var posts = _context.posts.Select(post => post.AsDto());
             return posts;
         }
 
@@ -34,7 +35,7 @@ namespace Brandon_RedditAPI.Controllers
         [Route("{Id}")]
         public ActionResult<PostDto> GetPost(string Id)
         {
-            var post = _Data.getPost(Id);
+            var post = _context.getPost(Id);
             if(post is null) { return NotFound($"The post with the Id of: {Id} was not found"); }
 
             return post.AsDto(_Data.getComments(Id));

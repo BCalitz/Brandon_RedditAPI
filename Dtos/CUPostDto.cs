@@ -12,7 +12,7 @@ namespace Brandon_RedditAPI.Dtos
     {
         [Required]
         public string Title { get; set; }
-        public string[] Tags { get; set; }
+        public string Tags { get; set; }
         [Required]
         public string Content { get; set; }
 

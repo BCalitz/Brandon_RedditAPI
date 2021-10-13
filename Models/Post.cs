@@ -14,6 +14,6 @@ namespace Brandon_RedditAPI.Models
         public int Downvotes { get; set; }
         public DateTime PostDate { get; set; }
         public string Title { get; set; }
-        public string[] Tags { get; set; }
+        public string Tags { get; set; }
     }
 }
