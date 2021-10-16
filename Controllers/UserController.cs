@@ -14,8 +14,8 @@ namespace Brandon_RedditAPI.Controllers
     [Route("api/[controller]")]
     public class UserController : Controller
     {
-        private IPostData _Data;
-        public UserController(IPostData postData)
+        private IDBData _Data;
+        public UserController(IDBData postData)
         {
             this._Data = postData;
         }

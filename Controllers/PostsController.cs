@@ -13,9 +13,9 @@ namespace Brandon_RedditAPI.Controllers
     [Route("api/[controller]")]
     public class PostsController : ControllerBase
     {
-        private readonly IPostData _Data;
+        private readonly IDBData _Data;
 
-        public PostsController(IPostData data)
+        public PostsController(IDBData data)
         {
             _Data = data;
         }
@@ -122,70 +122,7 @@ namespace Brandon_RedditAPI.Controllers
         }
 
 
-        // GET ###/api/posts/comment###
-        //Looks through all Posts
-        [HttpGet]
-        [Route("comments")]
-        public ActionResult<IEnumerable<CommentDto>> GetComments([FromBody]string Id)
-        {
-            //var post = _Data.getPost(Id);
-            //if (post is null) { return NotFound($"The post with the Id of: {Id} was not found"); }
-
-            var comments = _Data.getComments(Id);
-            return comments.Select(comment => comment.AsDto(_Data.getVotes(Id))).ToList();
-        }
-
-
-        // Post ###/api/posts/comment###
-        //Adds a comment
-        [HttpPost]
-        [Route("comments")]
-        public ActionResult CommentPost(CUCommentDto commentdata)
-        {
-
-            var user = _Data.isValidAPIKey(Request.Headers["ApiKey"]);
-            if (user is null) { return Unauthorized("\"ApiKey\" has no value or invalid"); }
-
-            var post = _Data.getPost(commentdata.PostId);
-            if (post is null) { return NotFound($"The post with the Id of: {commentdata.PostId} was not found"); }
-
-
-
-            var comment = new Comment()
-            {
-                Id = "C_"+Guid.NewGuid().GetHashCode(),
-                PostId = commentdata.PostId,
-                AuthorId = user.Id,
-                Content = commentdata.Content,
-                CommentDate = DateTime.Now
-            };
-
-            _Data.addComment(comment);
-
-
-
-            return Ok("Created Comment");
-        }
-
-
-        [HttpPut]
-        [Route("comments/{Id}")]
-        public ActionResult<CommentDto> UpdateComment(string Id, CUCommentDto commentdata)
-        {
-
-
-            var exComment = _Data.getComment(Id);
-            if (exComment is null) { return NotFound($"The Comment with the Id of: {Id} was not found"); }
-
-            var user = _Data.isValidAPIKey(Request.Headers["ApiKey"]);
-            if (user.Id != exComment.AuthorId) { return Unauthorized("\"ApiKey\" has no value or invalid"); }
-
-
-
-            _Data.updateComment(Id, commentdata);
-
-            return Ok("Edit Successfull");
-        }
+        
 
 
 

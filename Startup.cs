@@ -23,7 +23,7 @@ namespace Brandon_RedditAPI
         {
             services.AddEntityFrameworkSqlite().AddDbContext<DBSetup>();
 
-            services.AddTransient<IPostData, DBData >();
+            services.AddTransient<IDBData, DBData >();
             services.AddControllers();
         }
 

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Brandon_RedditAPI.Data
 {
-    public interface IPostData
+    public interface IDBData
     {
         void addPost(Post post);
         public Post getPost(string id);

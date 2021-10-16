@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Brandon_RedditAPI.Data
 {
-    public class DBData : IPostData
+    public class DBData : IDBData
     {
         private readonly DBSetup _context;
 
