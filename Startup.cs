@@ -1,7 +1,6 @@
 using Brandon_RedditAPI.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -11,19 +10,20 @@ namespace Brandon_RedditAPI
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
         {
-            Configuration = configuration;
+            using (var client = new DBSetup())
+            {
+                client.Database.EnsureCreated();
+            }
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DBSetup>();
+            services.AddEntityFrameworkSqlite().AddDbContext<DBSetup>();
 
-            services.AddSingleton<IPostData, DBPostData>();
+            services.AddTransient<IPostData, DBPostData >();
             services.AddControllers();
         }
 

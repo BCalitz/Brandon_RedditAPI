@@ -1,8 +1,5 @@
 ﻿using Brandon_RedditAPI.Dtos;
 using Brandon_RedditAPI.Models;
-using MongoDB.Bson;
-using MongoDB.Driver;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -25,6 +22,7 @@ namespace Brandon_RedditAPI.Data
         public void addPost(Post post)
         {
             _context.posts.Add(post);
+            _context.SaveChanges();
         }
 
         public void deletePost(string Id)
@@ -34,7 +32,7 @@ namespace Brandon_RedditAPI.Data
 
         public Comment getComment(string Id)
         {
-            return _context.comments.SingleOrDefault(c => c.Id == Id);
+            return _context.comments.Single(c => c.Id == Id);
         }
 
         public IEnumerable<Comment> getComments(string Id)
@@ -52,9 +50,9 @@ namespace Brandon_RedditAPI.Data
             return _context.posts.ToList();
         }
 
-        public void updatePost(PostDto postdata)
+        public void updatePost(string Id, CUPostDto postdata)
         {
-           var post =  getPost(postdata.Id);
+           var post =  getPost(Id);
             //only changing data that has been inserted
             if (!(postdata.Title is null)) { post.Title = postdata.Title; }
             if (!(postdata.Tags is null)) { post.Tags = postdata.Tags; }

@@ -1,9 +1,6 @@
 ﻿using Brandon_RedditAPI.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Design;
 
 namespace Brandon_RedditAPI.Data
 {
@@ -12,7 +9,7 @@ namespace Brandon_RedditAPI.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
-            .UseSqlite(@"Data Source = BrandonRedditAPI;");
+            .UseSqlite(@"Filename = BrandonRedditAPI;");
         }
 
         public DbSet<Post> posts { get; set; }
@@ -20,4 +17,5 @@ namespace Brandon_RedditAPI.Data
         public DbSet<User> users { get; set; }
         public DbSet<Vote> votes { get; set; }
     }
+
 }

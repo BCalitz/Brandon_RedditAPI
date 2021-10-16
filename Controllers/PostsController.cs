@@ -13,9 +13,9 @@ namespace Brandon_RedditAPI.Controllers
     [Route("api/[controller]")]
     public class PostsController : ControllerBase
     {
-        private readonly DBPostData _Data;
+        private readonly IPostData _Data;
 
-        public PostsController(DBPostData data)
+        public PostsController(IPostData data)
         {
             _Data = data;
         }
@@ -70,13 +70,13 @@ namespace Brandon_RedditAPI.Controllers
         //Edits the Post
         [HttpPut]
         [Route("{Id}")]
-        public ActionResult<PostDto> UpdatePost(string Id, PostDto postdata)
+        public ActionResult<PostDto> UpdatePost(string Id, CUPostDto postdata)
         {
             if (_Data.getPost(Id) is null) { return NotFound($"The post with the Id of: {Id} was not found"); }
 
             
 
-            _Data.updatePost(postdata);
+            _Data.updatePost(Id, postdata);
 
             return Ok("Edit Successfull");
         }
