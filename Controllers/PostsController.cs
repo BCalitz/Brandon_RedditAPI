@@ -19,8 +19,9 @@ namespace Brandon_RedditAPI.Controllers
         {
             _Data = data;
         }
+
         // GET ###/api/posts/###
-        //Looks through all Posts
+        // Looks through all Posts
         [HttpGet]
         [Route("")]
         public IEnumerable<PostDto> GetPosts()
@@ -30,7 +31,7 @@ namespace Brandon_RedditAPI.Controllers
         }
 
         // GET ###/api/posts/{Id}###
-        //Selects a Post
+        // Selects a Post
         [HttpGet]
         [Route("{Id}")]
         public ActionResult<PostDto> GetPost(string Id)
@@ -42,7 +43,7 @@ namespace Brandon_RedditAPI.Controllers
         }
 
         // POST ###/api/posts/###
-        //Create a post
+        // Create a post
         [HttpPost]
         [Route("")]
         public ActionResult<PostDto> AddPost(PostDto postdata)
@@ -67,7 +68,7 @@ namespace Brandon_RedditAPI.Controllers
 
 
         // PUT ###/api/posts/{Id}###
-        //Edits the Post
+        // Edits the Post
         [HttpPut]
         [Route("{Id}")]
         public ActionResult<PostDto> UpdatePost(string Id, CUPostDto postdata)
@@ -86,7 +87,7 @@ namespace Brandon_RedditAPI.Controllers
         }
 
         // DELETE ###/api/posts/{Id}###
-        //Edits the Post
+        // Deletes the Post
         [HttpDelete]
         [Route("{Id}")]
         public ActionResult DeletePost(string Id)
@@ -102,7 +103,7 @@ namespace Brandon_RedditAPI.Controllers
         }
 
         // Post ###/api/posts/vote###
-        //Edits the Post
+        // Vote
         [HttpPost]
         [Route("vote")]
         public ActionResult VotePost(VoteDto voteData)

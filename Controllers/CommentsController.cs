@@ -20,12 +20,13 @@ namespace Brandon_RedditAPI.Controllers
             this._Data = dbData;
         }
 
-        // GET ###/api/posts/comment###
-        //Looks through all Posts
+        // GET ###/api/comments###
+        // Gets all comments
         [HttpGet]
         [Route("")]
         public ActionResult<IEnumerable<CommentDto>> GetComments([FromBody] string Id)
         {
+            //ApiKey Authentication
             var post = _Data.getPost(Id);
             if (post is null) { return NotFound($"The post with the Id of: {Id} was not found"); }
 
@@ -34,8 +35,8 @@ namespace Brandon_RedditAPI.Controllers
         }
 
 
-        // Post ###/api/posts/comment###
-        //Adds a comment
+        // Post ###/api/comments###
+        // Adds a comment
         [HttpPost]
         [Route("")]
         public ActionResult CommentPost(CUCommentDto commentdata)
@@ -65,7 +66,8 @@ namespace Brandon_RedditAPI.Controllers
             return Ok("Created Comment");
         }
 
-
+        // Post ###/api/comments/{Id}###
+        // Edits a comment
         [HttpPut]
         [Route("{Id}")]
         public ActionResult<CommentDto> UpdateComment(string Id, CUCommentDto commentdata)

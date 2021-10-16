@@ -9,7 +9,7 @@ namespace Brandon_RedditAPI
 {
     public static class Extensions
     {
-
+        //convert objects to Dto Counterpart
         public static PostDto AsDto(this Post post,Votes votes)
         {
             return new PostDto

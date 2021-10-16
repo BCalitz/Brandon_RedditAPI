@@ -20,6 +20,9 @@ namespace Brandon_RedditAPI.Controllers
             this._Data = postData;
         }
 
+
+        // POST ###/api/users/register###
+        // Registers a User
         [HttpPost]
         [Route("register")]
         public ActionResult RegisterUser(CUUserDto userData)
@@ -36,6 +39,9 @@ namespace Brandon_RedditAPI.Controllers
             return Ok();
         }
 
+
+        // GET ###/api/users/posts###
+        // Gets all posts a user has made
         [HttpGet]
         [Route("posts")]
         public ActionResult<IEnumerable<PostDto>> UserPosts([FromBody] string username)
@@ -45,6 +51,8 @@ namespace Brandon_RedditAPI.Controllers
             return _Data.getUserPosts(user.Id).Select(post => post.AsDto(_Data.getVotes(post.Id))).ToList();
         }
 
+        // GET ###/api/users/getkey###
+        // Gets a Users ApiKey
         [HttpGet]
         [Route("getKey")]
         public ActionResult<string> GetKey(LoginDto loginInfo)
@@ -55,6 +63,8 @@ namespace Brandon_RedditAPI.Controllers
             return user.APIKey.ToString();
         }
 
+        // GET ###/api/users/getuser###
+        // get a users info
         [HttpGet]
         [Route("getUser")]
         public ActionResult<object> GetUser([FromBody] string Id)
@@ -65,6 +75,8 @@ namespace Brandon_RedditAPI.Controllers
             return new {user.Id, user.Username };
         }
 
+        // GET ###/api/users/myposts###
+        // Gets post you have made
         [HttpGet]
         [Route("myPosts")]
         public ActionResult<IEnumerable<PostDto>> UserPosts()
@@ -75,6 +87,8 @@ namespace Brandon_RedditAPI.Controllers
             return _Data.getUserPosts(user.Id).Select(post => post.AsDto(_Data.getVotes(post.Id))).ToList();
         }
 
+        // GET ###/api/users/myactivity###
+        // Gets all posts you have upvoted or downvoted
         [HttpGet]
         [Route("myActivity")]
         public ActionResult<IEnumerable<PostDto>> UserActivity()
@@ -84,11 +98,5 @@ namespace Brandon_RedditAPI.Controllers
 
             return _Data.getUserActivity(user.Id).Select(post => post.AsDto(_Data.getVotes(post.Id))).ToList();
         }
-
-
-
-
-
-
     }
 }

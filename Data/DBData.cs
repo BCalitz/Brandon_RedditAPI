@@ -74,12 +74,14 @@ namespace Brandon_RedditAPI.Data
         public void updateComment(string Id,CUCommentDto commentdata)
         {
             var comment = getComment(Id);
+            //only changing data that has been inserted
             if (!(commentdata.Content is null)) { comment.Content = commentdata.Content; }
             _context.SaveChanges();
         }
 
         public Boolean Vote(Vote vote)
-        {
+        {   
+            //check if user has already voted
             if (_context.votes.Where(v => v.ThingId == vote.Id && v.UserId == vote.UserId) is null)
             {
                 _context.votes.Add(vote);
@@ -104,10 +106,12 @@ namespace Brandon_RedditAPI.Data
 
         public IEnumerable<Post> getUserActivity(string UserId)
         {
+            //get all activity done by user
             var activitys =  _context.votes.Where(p => p.UserId == UserId).ToList();
             List<Post> posts = new List<Post>();
             foreach(var activity in activitys)
             {
+                //getting all posts only
                 if (activity.ThingId[0] == 'P')
                 {
                     posts.Add(getPost(activity.ThingId));
@@ -144,7 +148,7 @@ namespace Brandon_RedditAPI.Data
             }
             catch (Exception)
             {
-
+                //catching as if the guid is the wrong lenght it throws exeption
                 return null;
             }
 
