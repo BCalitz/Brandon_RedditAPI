@@ -90,15 +90,15 @@ namespace Brandon_RedditAPI.Data
             _context.SaveChanges();
         }
 
-        public IEnumerable<Post> getUserPosts(string AuthorId)
+        public IEnumerable<Post> getUserPosts(string UserId)
         {
-            var posts =  _context.posts.Where(p => p.AuthorId == AuthorId).ToList();
+            var posts =  _context.posts.Where(p => p.UserId == UserId).ToList();
             return posts;
         }
 
-        public IEnumerable<Post> getUserActivity(string AuthorId)
+        public IEnumerable<Post> getUserActivity(string UserId)
         {
-            var activitys =  _context.votes.Where(p => p.AuthorId == AuthorId).ToList();
+            var activitys =  _context.votes.Where(p => p.UserId == UserId).ToList();
             List<Post> posts = new List<Post>();
             foreach(var activity in activitys)
             {

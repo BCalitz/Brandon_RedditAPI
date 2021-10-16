@@ -52,7 +52,7 @@ namespace Brandon_RedditAPI.Controllers
             Post post = new Post()
             {
                 Id = "P_"+Guid.NewGuid().GetHashCode(),
-                AuthorId = user.Id,
+                UserId = user.Id,
                 Title = postdata.Title,
                 Content = postdata.Content,
                 Tags = postdata.Tags,
@@ -77,7 +77,7 @@ namespace Brandon_RedditAPI.Controllers
             if ( post is null) { return NotFound($"The post with the Id of: {Id} was not found"); }
 
             var user = _Data.isValidAPIKey(Request.Headers["ApiKey"]);
-            if (user.Id != post.AuthorId) { return Unauthorized("\"ApiKey\" has no value or invalid"); }
+            if (user.Id != post.UserId) { return Unauthorized("\"ApiKey\" has no value or invalid"); }
 
 
             _Data.updatePost(Id, postdata);
@@ -95,7 +95,7 @@ namespace Brandon_RedditAPI.Controllers
             if (post is null) { return NotFound($"The post with the Id of: {Id} was not found"); }
 
             var user = _Data.isValidAPIKey(Request.Headers["ApiKey"]);
-            if (user.Id != post.AuthorId) { return Unauthorized("\"ApiKey\" has no value or invalid"); }
+            if (user.Id != post.UserId) { return Unauthorized("\"ApiKey\" has no value or invalid"); }
 
             _Data.deletePost(Id);
             return Ok("Deleted Post");
@@ -113,7 +113,7 @@ namespace Brandon_RedditAPI.Controllers
             Vote vote = new Vote()
             {
                 Id = "V_"+Guid.NewGuid().GetHashCode(),
-                AuthorId = user.Id,
+                UserId = user.Id,
                 ThingId = voteData.thingId,
                 vote = voteData.rating
             };

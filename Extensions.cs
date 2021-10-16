@@ -16,7 +16,7 @@ namespace Brandon_RedditAPI
             {
                 Id = post.Id,
                 Title = post.Title,
-                AuthorId = post.AuthorId,
+                UserId = post.UserId,
                 Content = post.Content,
                 Tags = post.Tags,
                 votes = votes,
@@ -30,7 +30,7 @@ namespace Brandon_RedditAPI
             {
                 Id = comment.Id,
                 PostId = comment.PostId,
-                AuthorId = comment.AuthorId,
+                UserId = comment.UserId,
                 Content = comment.Content,
                 votes = votes,
                 PostDate = comment.CommentDate
@@ -44,7 +44,7 @@ namespace Brandon_RedditAPI
                 Id = post.Id,
                 Title = post.Title,
                 Content = post.Content,
-                AuthorId = post.AuthorId,
+                UserId = post.UserId,
                 Tags = post.Tags,
                 votes = votes,
                 PostDate = post.PostDate,

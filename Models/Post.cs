@@ -9,7 +9,7 @@ namespace Brandon_RedditAPI.Models
     public class Post
     {
         public string Id { get; set; }
-        public string AuthorId { get; set; }
+        public string UserId { get; set; }
         public string Content { get; set; }
         public DateTime PostDate { get; set; }
         public string Title { get; set; }

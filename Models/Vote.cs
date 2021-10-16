@@ -9,7 +9,7 @@ namespace Brandon_RedditAPI.Models
     public class Vote
     {
         public string Id{ get; set; }
-        public string AuthorId { get; set; }
+        public string UserId { get; set; }
         public string ThingId{ get; set; }
         public int vote{ get; set; }
 

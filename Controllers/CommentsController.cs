@@ -53,7 +53,7 @@ namespace Brandon_RedditAPI.Controllers
             {
                 Id = "C_" + Guid.NewGuid().GetHashCode(),
                 PostId = commentdata.PostId,
-                AuthorId = user.Id,
+                UserId = user.Id,
                 Content = commentdata.Content,
                 CommentDate = DateTime.Now
             };
@@ -76,7 +76,7 @@ namespace Brandon_RedditAPI.Controllers
             if (exComment is null) { return NotFound($"The Comment with the Id of: {Id} was not found"); }
 
             var user = _Data.isValidAPIKey(Request.Headers["ApiKey"]);
-            if (user.Id != exComment.AuthorId) { return Unauthorized("\"ApiKey\" has no value or invalid"); }
+            if (user.Id != exComment.UserId) { return Unauthorized("\"ApiKey\" has no value or invalid"); }
 
 
 
