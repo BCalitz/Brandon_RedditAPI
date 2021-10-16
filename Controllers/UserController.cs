@@ -34,5 +34,19 @@ namespace Brandon_RedditAPI.Controllers
 
             return Ok(user.Id);
         }
+
+
+        [HttpGet]
+        [Route("posts")]
+        public ActionResult<IEnumerable<PostDto>> UserPosts([FromBody] string Id)
+        {
+            if (_Data.getUser(Id) is null) { return NotFound($"The user with the Id of: {Id} was not found"); }
+            return _Data.getUserPosts(Id).Select(post => post.AsDto()).ToList();
+        }
+
+
+
+
+
     }
 }

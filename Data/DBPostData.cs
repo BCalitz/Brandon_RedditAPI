@@ -17,6 +17,7 @@ namespace Brandon_RedditAPI.Data
         public void addComment(Comment comment)
         {
             _context.comments.Add(comment);
+            _context.SaveChanges();
         }
 
         public void addPost(Post post)
@@ -28,6 +29,7 @@ namespace Brandon_RedditAPI.Data
         public void deletePost(string Id)
         {
             _context.posts.Remove(getPost(Id));
+            _context.SaveChanges();
         }
 
         public Comment getComment(string Id)
@@ -71,11 +73,13 @@ namespace Brandon_RedditAPI.Data
         public void Vote(Vote vote)
         {
             _context.votes.Add(vote);
+            _context.SaveChanges();
         }
 
         public void AddUser(User user)
         {
             _context.users.Add(user);
+            _context.SaveChanges();
         }
 
         public IEnumerable<Post> getUserPosts(string AuthorId)
@@ -97,7 +101,9 @@ namespace Brandon_RedditAPI.Data
             return posts;
         }
 
-
-
+        public User getUser(string Id)
+        {
+            return _context.users.SingleOrDefault(u => u.Id == Id);
+        }
     }
 }
