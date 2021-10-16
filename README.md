@@ -2,7 +2,7 @@
 
 ### Contents
 ##### Posts
-* [GET : "api/posts/"](https://github.com/BCalitz/Brandon_RedditAPI/master/README.md#L52)
+* [GET : "api/posts/"](https://github.com/BCalitz/Brandon_RedditAPI/blob/master/README.md#L52)
 
 ### Authenticatiom
 
