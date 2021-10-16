@@ -10,22 +10,21 @@ namespace Brandon_RedditAPI
     public static class Extensions
     {
 
-        public static PostDto AsDto(this Post post)
+        public static PostDto AsDto(this Post post,Votes votes)
         {
             return new PostDto
             {
                 Id = post.Id,
-                AuthorId = post.AuthorId,
                 Title = post.Title,
+                AuthorId = post.AuthorId,
                 Content = post.Content,
                 Tags = post.Tags,
-                Downvotes = post.Downvotes,
-                Upvotes = post.Upvotes,
+                votes = votes,
                 PostDate = post.PostDate
             };
         }
 
-        public static CommentDto AsDto(this Comment comment)
+        public static CommentDto AsDto(this Comment comment,Votes votes)
         {
             return new CommentDto
             {
@@ -33,25 +32,23 @@ namespace Brandon_RedditAPI
                 PostId = comment.PostId,
                 AuthorId = comment.AuthorId,
                 Content = comment.Content,
-                Downvotes = comment.Downvotes,
-                Upvotes = comment.Upvotes,
+                votes = votes,
                 PostDate = comment.CommentDate
             };
         }
 
-        public static PostDto AsDto(this Post post, IEnumerable<Comment> comments)
+        public static PostDto AsDto(this Post post, IEnumerable<CommentDto> comments, Votes votes)
         {
             return new PostDto
             {
                 Id = post.Id,
-                AuthorId = post.AuthorId,
                 Title = post.Title,
                 Content = post.Content,
+                AuthorId = post.AuthorId,
                 Tags = post.Tags,
-                Downvotes = post.Downvotes,
-                Upvotes = post.Upvotes,
+                votes = votes,
                 PostDate = post.PostDate,
-                comments = comments.Select(comment => comment.AsDto())
+                comments = comments,
         };
         }
 

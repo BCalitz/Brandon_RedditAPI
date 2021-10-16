@@ -28,20 +28,30 @@ namespace Brandon_RedditAPI.Controllers
             {
                 Id = "U_" + Guid.NewGuid().GetHashCode(),
                 Password = Encoding.UTF8.GetBytes(userData.Password),
-                Username = userData.Username
+                Username = userData.Username,
+                APIKey = Guid.NewGuid()
             };
             _Data.AddUser(user);
 
             return Ok(user.Id);
         }
 
-
         [HttpGet]
         [Route("posts")]
         public ActionResult<IEnumerable<PostDto>> UserPosts([FromBody] string Id)
         {
             if (_Data.getUser(Id) is null) { return NotFound($"The user with the Id of: {Id} was not found"); }
-            return _Data.getUserPosts(Id).Select(post => post.AsDto()).ToList();
+            return _Data.getUserPosts(Id).Select(post => post.AsDto(_Data.getVotes(post.Id))).ToList();
+        }
+
+        [HttpGet]
+        [Route("getKey")]
+        public ActionResult<string> GetKey(LoginDto loginInfo)
+        {
+            
+            var user = _Data.login(loginInfo);
+            if (user is null) { return Unauthorized("User does not exist or invalid credentials"); }
+            return user.APIKey.ToString();
         }
 
 

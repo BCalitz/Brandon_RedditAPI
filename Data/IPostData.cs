@@ -14,12 +14,15 @@ namespace Brandon_RedditAPI.Data
         void addComment(Comment comment);
         IEnumerable<Comment> getComments(string Id);
         Comment getComment(string Id);
-        void updateComment(CommentDto commentdata);
+        public void updateComment(string Id, CUCommentDto commentdata);
         void Vote(Vote vote);
         void AddUser(User user);
 
         User getUser(string Id);
         IEnumerable<Post> getUserActivity(string AuthorId);
         IEnumerable<Post> getUserPosts(string AuthorId);
+        User login(LoginDto loginInfo);
+        User isValidAPIKey(string APIKey);
+        Votes getVotes(string Id);
     }
 }

@@ -9,8 +9,8 @@ namespace Brandon_RedditAPI.Dtos
     public class CommentDto: CUCommentDto
     {
         public string Id { get; set; }
-        public int Upvotes { get; set; }
-        public int Downvotes { get; set; }
+        public string AuthorId { get; set; }
+        public Votes votes { get; set; }
         public DateTime PostDate { get; set; }
     }
 }

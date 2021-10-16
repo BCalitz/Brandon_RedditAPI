@@ -30,14 +30,8 @@ namespace Brandon_RedditAPI.Migrations
                     b.Property<string>("Content")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Downvotes")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("PostId")
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("Upvotes")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -55,9 +49,6 @@ namespace Brandon_RedditAPI.Migrations
                     b.Property<string>("Content")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Downvotes")
-                        .HasColumnType("INTEGER");
-
                     b.Property<DateTime>("PostDate")
                         .HasColumnType("TEXT");
 
@@ -67,9 +58,6 @@ namespace Brandon_RedditAPI.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Upvotes")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
 
                     b.ToTable("posts");
@@ -78,6 +66,9 @@ namespace Brandon_RedditAPI.Migrations
             modelBuilder.Entity("Brandon_RedditAPI.Models.User", b =>
                 {
                     b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("APIKey")
                         .HasColumnType("TEXT");
 
                     b.Property<byte[]>("Password")

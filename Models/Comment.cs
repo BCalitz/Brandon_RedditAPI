@@ -10,10 +10,7 @@ namespace Brandon_RedditAPI.Models
         public string Id { get; set; }
         public string PostId { get; set; }
         public string AuthorId { get; set; }
-
         public string Content { get; set; }
-        public int Upvotes { get; set; }
-        public int Downvotes { get; set; }
         public DateTime CommentDate { get; set; }
 
     }

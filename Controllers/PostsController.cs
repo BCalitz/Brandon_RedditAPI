@@ -25,7 +25,7 @@ namespace Brandon_RedditAPI.Controllers
         [Route("")]
         public IEnumerable<PostDto> GetPosts()
         {
-            var posts = _Data.getPosts().Select(post => post.AsDto());
+            var posts = _Data.getPosts().Select(post => post.AsDto(_Data.getVotes(post.Id)));
             return posts;
         }
 
@@ -37,8 +37,8 @@ namespace Brandon_RedditAPI.Controllers
         {
             var post = _Data.getPost(Id);
             if(post is null) { return NotFound($"The post with the Id of: {Id} was not found"); }
-
-            return post.AsDto(_Data.getComments(Id));
+            var comments = _Data.getComments(Id).Select(c => c.AsDto(_Data.getVotes(c.Id)));
+            return post.AsDto(comments, _Data.getVotes(post.Id));
         }
 
         // POST ###/api/posts/###
@@ -47,15 +47,15 @@ namespace Brandon_RedditAPI.Controllers
         [Route("")]
         public ActionResult<PostDto> AddPost(PostDto postdata)
         {
+            var user = _Data.isValidAPIKey(Request.Headers["ApiKey"]);
+            if (user is null) { return Unauthorized("\"ApiKey\" has no value or invalid"); }
             Post post = new Post()
             {
                 Id = "P_"+Guid.NewGuid().GetHashCode(),
-                AuthorId = postdata.AuthorId,
+                AuthorId = user.Id,
                 Title = postdata.Title,
                 Content = postdata.Content,
                 Tags = postdata.Tags,
-                Downvotes = 0,
-                Upvotes = 0,
                 PostDate = DateTime.Now
 
             };
@@ -72,9 +72,13 @@ namespace Brandon_RedditAPI.Controllers
         [Route("{Id}")]
         public ActionResult<PostDto> UpdatePost(string Id, CUPostDto postdata)
         {
-            if (_Data.getPost(Id) is null) { return NotFound($"The post with the Id of: {Id} was not found"); }
 
-            
+            var post = _Data.getPost(Id);
+            if ( post is null) { return NotFound($"The post with the Id of: {Id} was not found"); }
+
+            var user = _Data.isValidAPIKey(Request.Headers["ApiKey"]);
+            if (user.Id != post.AuthorId) { return Unauthorized("\"ApiKey\" has no value or invalid"); }
+
 
             _Data.updatePost(Id, postdata);
 
@@ -90,6 +94,9 @@ namespace Brandon_RedditAPI.Controllers
             var post = _Data.getPost(Id);
             if (post is null) { return NotFound($"The post with the Id of: {Id} was not found"); }
 
+            var user = _Data.isValidAPIKey(Request.Headers["ApiKey"]);
+            if (user.Id != post.AuthorId) { return Unauthorized("\"ApiKey\" has no value or invalid"); }
+
             _Data.deletePost(Id);
             return Ok("Deleted Post");
         }
@@ -100,10 +107,13 @@ namespace Brandon_RedditAPI.Controllers
         [Route("vote")]
         public ActionResult VotePost(VoteDto voteData)
         {
+            var user = _Data.isValidAPIKey(Request.Headers["ApiKey"]);
+            if (user is null) { return Unauthorized("\"ApiKey\" has no value or invalid"); }
+
             Vote vote = new Vote()
             {
                 Id = "V_"+Guid.NewGuid().GetHashCode(),
-                AuthorId = null,
+                AuthorId = user.Id,
                 ThingId = voteData.thingId,
                 vote = voteData.rating
             };
@@ -122,7 +132,7 @@ namespace Brandon_RedditAPI.Controllers
             //if (post is null) { return NotFound($"The post with the Id of: {Id} was not found"); }
 
             var comments = _Data.getComments(Id);
-            return comments.Select(comment => comment.AsDto()).ToList();
+            return comments.Select(comment => comment.AsDto(_Data.getVotes(Id))).ToList();
         }
 
 
@@ -132,17 +142,21 @@ namespace Brandon_RedditAPI.Controllers
         [Route("comments")]
         public ActionResult CommentPost(CUCommentDto commentdata)
         {
+
+            var user = _Data.isValidAPIKey(Request.Headers["ApiKey"]);
+            if (user is null) { return Unauthorized("\"ApiKey\" has no value or invalid"); }
+
             var post = _Data.getPost(commentdata.PostId);
             if (post is null) { return NotFound($"The post with the Id of: {commentdata.PostId} was not found"); }
+
+
 
             var comment = new Comment()
             {
                 Id = "C_"+Guid.NewGuid().GetHashCode(),
                 PostId = commentdata.PostId,
-                AuthorId = commentdata.AuthorId,
+                AuthorId = user.Id,
                 Content = commentdata.Content,
-                Upvotes = 0,
-                Downvotes = 0,
                 CommentDate = DateTime.Now
             };
 
@@ -155,16 +169,20 @@ namespace Brandon_RedditAPI.Controllers
 
 
         [HttpPut]
-        [Route("comment/{Id}")]
-        public ActionResult<CommentDto> UpdateComment(string Id, CommentDto commentdata)
+        [Route("comments/{Id}")]
+        public ActionResult<CommentDto> UpdateComment(string Id, CUCommentDto commentdata)
         {
+
+
             var exComment = _Data.getComment(Id);
             if (exComment is null) { return NotFound($"The Comment with the Id of: {Id} was not found"); }
 
-    
-            
+            var user = _Data.isValidAPIKey(Request.Headers["ApiKey"]);
+            if (user.Id != exComment.AuthorId) { return Unauthorized("\"ApiKey\" has no value or invalid"); }
 
-            _Data.updateComment(commentdata);
+
+
+            _Data.updateComment(Id, commentdata);
 
             return Ok("Edit Successfull");
         }

@@ -9,7 +9,6 @@ namespace Brandon_RedditAPI.Dtos
     public class CUCommentDto
     {
         public string PostId { get; set; }
-        public string AuthorId { get; set; }
         public string Content { get; set; }
     }
 }

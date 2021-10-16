@@ -10,8 +10,7 @@ namespace Brandon_RedditAPI.Dtos
     {
         public string Id { get; set; }
         public string AuthorId { get; set; }
-        public int Upvotes { get; set; }
-        public int Downvotes { get; set; }
+        public Votes votes { get; set; }
         public DateTime PostDate { get; set; }
 
         public IEnumerable<CommentDto> comments { get; set; }
