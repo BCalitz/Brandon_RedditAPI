@@ -1,5 +1,6 @@
 ﻿using Brandon_RedditAPI.Dtos;
 using Brandon_RedditAPI.Models;
+using System;
 using System.Collections.Generic;
 
 namespace Brandon_RedditAPI.Data
@@ -15,7 +16,7 @@ namespace Brandon_RedditAPI.Data
         IEnumerable<Comment> getComments(string Id);
         Comment getComment(string Id);
         public void updateComment(string Id, CUCommentDto commentdata);
-        void Vote(Vote vote);
+        Boolean Vote(Vote vote);
         void AddUser(User user);
 
         User getUser(string Username);

@@ -78,10 +78,16 @@ namespace Brandon_RedditAPI.Data
             _context.SaveChanges();
         }
 
-        public void Vote(Vote vote)
+        public Boolean Vote(Vote vote)
         {
-            _context.votes.Add(vote);
-            _context.SaveChanges();
+            if (_context.votes.Where(v => v.ThingId == vote.Id && v.UserId == vote.UserId) is null)
+            {
+                _context.votes.Add(vote);
+                _context.SaveChanges();
+                return true;
+            }
+            return false;
+            
         }
 
         public void AddUser(User user)
@@ -158,5 +164,6 @@ namespace Brandon_RedditAPI.Data
         {
             return _context.users.SingleOrDefault(u => u.Id == Id);
         }
+
     }
 }

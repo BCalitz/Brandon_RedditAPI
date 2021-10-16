@@ -33,7 +33,7 @@ namespace Brandon_RedditAPI.Controllers
             };
             _Data.AddUser(user);
 
-            return Ok(user.Id);
+            return Ok();
         }
 
         [HttpGet]

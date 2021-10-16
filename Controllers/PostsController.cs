@@ -110,6 +110,15 @@ namespace Brandon_RedditAPI.Controllers
             var user = _Data.isValidAPIKey(Request.Headers["ApiKey"]);
             if (user is null) { return Unauthorized("\"ApiKey\" has no value or invalid"); }
 
+
+            if (voteData.rating == 0) { return ValidationProblem("Rating cannot be 0"); }
+            if (_Data.getPost(voteData.thingId) is null)
+            {
+                if (_Data.getComment(voteData.thingId) is null)
+                {
+                    return NotFound("Id does not exist");
+                }
+            }
             Vote vote = new Vote()
             {
                 Id = "V_"+Guid.NewGuid().GetHashCode(),
@@ -117,8 +126,12 @@ namespace Brandon_RedditAPI.Controllers
                 ThingId = voteData.thingId,
                 vote = voteData.rating
             };
-            _Data.Vote(vote);
-            return Ok("Voted");
+            if (_Data.Vote(vote))
+            {
+                return Ok("Voted");
+            }
+                return Forbid("You have already voted for this thing.");
+      
         }
 
 

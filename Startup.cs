@@ -1,7 +1,6 @@
 using Brandon_RedditAPI.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -10,7 +9,7 @@ namespace Brandon_RedditAPI
 {
     public class Startup
     {
-        public Startup(Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
+        public Startup(IWebHostEnvironment env)
         {
             using (var client = new DBSetup())
             {

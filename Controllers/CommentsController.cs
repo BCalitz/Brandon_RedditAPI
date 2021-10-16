@@ -26,8 +26,8 @@ namespace Brandon_RedditAPI.Controllers
         [Route("")]
         public ActionResult<IEnumerable<CommentDto>> GetComments([FromBody] string Id)
         {
-            //var post = _Data.getPost(Id);
-            //if (post is null) { return NotFound($"The post with the Id of: {Id} was not found"); }
+            var post = _Data.getPost(Id);
+            if (post is null) { return NotFound($"The post with the Id of: {Id} was not found"); }
 
             var comments = _Data.getComments(Id);
             return comments.Select(comment => comment.AsDto(_Data.getVotes(Id))).ToList();
