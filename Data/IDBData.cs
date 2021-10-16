@@ -18,7 +18,8 @@ namespace Brandon_RedditAPI.Data
         void Vote(Vote vote);
         void AddUser(User user);
 
-        User getUser(string Id);
+        User getUser(string Username);
+        User getUserFromId(string Id);
         IEnumerable<Post> getUserActivity(string AuthorId);
         IEnumerable<Post> getUserPosts(string AuthorId);
         User login(LoginDto loginInfo);

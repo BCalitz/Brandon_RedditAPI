@@ -38,10 +38,11 @@ namespace Brandon_RedditAPI.Controllers
 
         [HttpGet]
         [Route("posts")]
-        public ActionResult<IEnumerable<PostDto>> UserPosts([FromBody] string Id)
+        public ActionResult<IEnumerable<PostDto>> UserPosts([FromBody] string username)
         {
-            if (_Data.getUser(Id) is null) { return NotFound($"The user with the Id of: {Id} was not found"); }
-            return _Data.getUserPosts(Id).Select(post => post.AsDto(_Data.getVotes(post.Id))).ToList();
+            var user = _Data.getUser(username);
+            if (user is null) { return NotFound($"The user with the Username of: {username} was not found"); }
+            return _Data.getUserPosts(user.Id).Select(post => post.AsDto(_Data.getVotes(post.Id))).ToList();
         }
 
         [HttpGet]
@@ -53,6 +54,37 @@ namespace Brandon_RedditAPI.Controllers
             if (user is null) { return Unauthorized("User does not exist or invalid credentials"); }
             return user.APIKey.ToString();
         }
+
+        [HttpGet]
+        [Route("getUser")]
+        public ActionResult<object> GetUser([FromBody] string Id)
+        {
+
+            var user = _Data.getUserFromId(Id);
+            if (user is null) { return Unauthorized("User does not exist or invalid credentials"); }
+            return new {user.Id, user.Username };
+        }
+
+        [HttpGet]
+        [Route("myPosts")]
+        public ActionResult<IEnumerable<PostDto>> UserPosts()
+        {
+            var user = _Data.isValidAPIKey(Request.Headers["ApiKey"]);
+            if (user is null) { return Unauthorized("\"ApiKey\" has no value or invalid"); }
+
+            return _Data.getUserPosts(user.Id).Select(post => post.AsDto(_Data.getVotes(post.Id))).ToList();
+        }
+
+        [HttpGet]
+        [Route("myActivity")]
+        public ActionResult<IEnumerable<PostDto>> UserActivity()
+        {
+            var user = _Data.isValidAPIKey(Request.Headers["ApiKey"]);
+            if (user is null) { return Unauthorized("\"ApiKey\" has no value or invalid"); }
+
+            return _Data.getUserActivity(user.Id).Select(post => post.AsDto(_Data.getVotes(post.Id))).ToList();
+        }
+
 
 
 

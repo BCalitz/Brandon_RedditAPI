@@ -110,9 +110,9 @@ namespace Brandon_RedditAPI.Data
             return posts;
         }
 
-        public User getUser(string Id)
+        public User getUser(string Username)
         {
-            return _context.users.SingleOrDefault(u => u.Id == Id);
+            return _context.users.SingleOrDefault(u => u.Username == Username);
         }
 
         public User login(LoginDto loginInfo)
@@ -154,5 +154,9 @@ namespace Brandon_RedditAPI.Data
             };
         }
 
+        public User getUserFromId(string Id)
+        {
+            return _context.users.SingleOrDefault(u => u.Id == Id);
+        }
     }
 }
