@@ -297,7 +297,7 @@ put your apiKey in the Header with the Header name of **"ApiKey"**
 	
 ## Other
 
-* ##### POST : "api/users/register"
+* ##### POST : "api/posts/vote"
 		
 	make a vote.
 	
