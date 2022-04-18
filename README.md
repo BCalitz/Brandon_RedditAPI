@@ -1,5 +1,8 @@
 # Brandon_RedditAPI
 
+### Pre Req
+ASP.NET Core 3.1 Runtime (v3.1.0)
+
 ### Contents
 ##### Posts
 * [GET : "api/posts/"](https://github.com/BCalitz/Brandon_RedditAPI/blob/master/README.md#get--apiposts)
